@@ -21,6 +21,7 @@ package gui;
 
 import data.Protocol;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -29,42 +30,48 @@ import java.util.List;
 class RunParameters {
     private String codebookType;
 
-    private String outputDir="";
-    private String workspaceFileName="";
-    private String overwriteFileName="";
-    private String protocolFileName="";
+    private String outputDir = "";
+    private String workspaceFileName = "";
+    private String overwriteFileName = "";
+    private String protocolFileName = "";
 
-    private boolean storeOptionsInSeparateSheets=false;
+    private boolean storeOptionsInSeparateSheets = false;
 
     private Protocol protocol = new Protocol();
 
-    RunParameters(){
+    RunParameters() {
 
     }
 
     /**
      * return the protocol name
+     *
      * @return the protocol name
      */
+    String getProtocolTablePrefix() {
+        return protocol.getProtocolTablePrefix();
+    }
+
     String getProtocolName() {
         return protocol.getProtocolName();
     }
 
     /**
      * sets the protocol name
-     * @param protocolName    the name of the protocol
+     * @param protocolTablePrefix    the name of the protocol
      */
-    void setProtocolName(String protocolName) {
-        protocol.setProtocolName(protocolName);
+    void setProtocolTablePrefix(String protocolTablePrefix) {
+        protocolTablePrefix = protocolTablePrefix.substring(0, protocolTablePrefix.lastIndexOf("_")+1);
+        protocol.setProtocolTablePrefix(protocolTablePrefix);
     }
 
     /**
      * sets the project name
      * @param projectName    the name of the project
      */
-    void setProjectName(String projectName){
-        protocol.setProjectName(projectName);
-    }
+//    void setProjectName(String projectName){
+//        protocol.setProjectName(projectName);
+//    }
 
     /**
      * get the nets that have been selected in the wizard
@@ -127,6 +134,9 @@ class RunParameters {
      * @param outputDir    the output directory
      */
     void setOutputDir(String outputDir) {
+        if(!outputDir.endsWith(File.separator)){
+            outputDir+=File.separator;
+        }
         this.outputDir = outputDir;
     }
 
@@ -150,17 +160,17 @@ class RunParameters {
      * get the full name of the protocol file, which contains a protocolName and projectName on every line
      * @return the full name of the protocol file
      */
-    String getProtocolFileName() {
-        return protocolFileName;
-    }
+//    String getProtocolFileName() {
+//        return protocolFileName;
+//    }
 
     /**
      * set the protocol filename, which was selected in the wizard
      * @param protocolFileName    the name of the protocolfile
      */
-    void setProtocolFileName(String protocolFileName) {
-        this.protocolFileName = protocolFileName;
-    }
+//    void setProtocolFileName(String protocolFileName) {
+//        this.protocolFileName = protocolFileName;
+//    }
 
     /**
      * loads extra information about the protocol, such as the version

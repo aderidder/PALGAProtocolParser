@@ -37,8 +37,9 @@ import java.util.stream.Collectors;
 public class Protocol {
     // List with nets selected in the wizard
     private List<String> selectedNets = new ArrayList<>();
+    private String protocolTablePrefix;
     private String protocolName;
-    private String projectName;
+//    private String projectName;
 
     private ProtocolInfo protocolInfo;
 
@@ -66,27 +67,20 @@ public class Protocol {
     }
 
     /**
-     * set the name of the protocol
-     * @param protocolName    the name of the protocol
+     * set the table prefix of the protocol as well as the name
+     * @param protocolTablePrefix    the name of the protocol
      */
-    public void setProtocolName(String protocolName){
-        this.protocolName = protocolName;
+    public void setProtocolTablePrefix(String protocolTablePrefix){
+        this.protocolTablePrefix = protocolTablePrefix;
+        protocolName = protocolTablePrefix.substring(0, protocolTablePrefix.length()-1);
     }
 
     /**
      * returns the name of the protocol
      * @return the name of the protocol
      */
-    public String getProtocolName(){
-        return protocolName;
-    }
-
-    /**
-     * set the name of the project
-     * @param projectName    the name of the project
-     */
-    public void setProjectName(String projectName){
-        this.projectName = projectName;
+    public String getProtocolTablePrefix(){
+        return protocolTablePrefix;
     }
 
     /**
@@ -143,6 +137,10 @@ public class Protocol {
         return netList;
     }
 
+    public String getProtocolName() {
+        return protocolName;
+    }
+
     /**
      * additional protocol info
      */
@@ -161,7 +159,7 @@ public class Protocol {
          */
         private void setup(){
             SQLiteUtils.openDB();
-            String data = SQLiteUtils.doProjectQuery();
+            String data = SQLiteUtils.doTableSettingsQuery();
             version = ParseUtils.getValue(data, versionPattern);
             setSmallVersion();
             SQLiteUtils.closeDB();

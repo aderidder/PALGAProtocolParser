@@ -48,11 +48,12 @@ class PalgaCodebook extends DefaultCodebook {
      */
     @Override
     public void writeToExcelSingleSheet(String outputDir){
-        List<String> mainHeaderNames = getWriteToExcelMainHeader();
+//        List<String> mainHeaderNames = getWriteToExcelMainHeader();
 
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
+//        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
+//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){
@@ -92,8 +93,9 @@ class PalgaCodebook extends DefaultCodebook {
         List<String> sheetHeaderList = Arrays.asList("PALGA_VALUE", "PALGA_DESCRIPTION", "CODESYSTEM");
 
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelOptionsMainHeader(), headerStyle);
+//        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
+//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelOptionsMainHeader(), headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){

@@ -23,7 +23,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -39,12 +38,13 @@ import org.controlsfx.dialog.Wizard;
 import org.controlsfx.dialog.WizardPane;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import utils.ParseUtils;
 import utils.SQLiteUtils;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -53,6 +53,9 @@ import java.util.stream.Collectors;
  */
 class ProtocolWizard {
     private static final Logger logger = LogManager.getLogger(ProtocolWizard.class.getName());
+//    private static final Pattern tablePrefixPattern = ParseUtils.getStringPattern("parameter_tabel_prefix");
+    private static final Pattern tablePrefixPattern = ParseUtils.getStringPattern("conclusion_net");
+
 
     private static final int wizardWidth = 600;
     private static final int wizardHeight = 300;
@@ -158,7 +161,7 @@ class ProtocolWizard {
             directoryChooser.setTitle("Select output directory");
             File selectedDirectory = directoryChooser.showDialog(null);
             if (selectedDirectory != null) {
-                textField.setText(selectedDirectory.getCanonicalPath()+File.separator);
+                textField.setText(selectedDirectory.getCanonicalPath());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,7 +253,7 @@ class ProtocolWizard {
                 int row = 0;
                 GridPane gridPane = createGridPane();
 
-                TextField protocolTextField = createBrowseFileRow(gridPane, "protocolFile", "Protocol file:", oldParameters.getProtocolFileName(), row++, txtFilesExtensionFilter, allFilesExtensionFilter);
+//                TextField protocolTextField = createBrowseFileRow(gridPane, "protocolFile", "Protocol file:", oldParameters.getProtocolFileName(), row++, txtFilesExtensionFilter, allFilesExtensionFilter);
                 TextField workspaceFileTextField = createBrowseFileRow(gridPane, "workspaceFile", "Workspace file:", oldParameters.getWorkspaceFileName(), row++, dbFilesExtensionFilter, allFilesExtensionFilter);
                 TextField outputFileDir = createBrowseDirRow(gridPane, "outputFileDir", "Output directory:", oldParameters.getOutputDir(), row++);
                 createBrowseFileRow(gridPane, "overwriteFile", "Name overwrite file:", oldParameters.getOverwriteFileName(), row++, txtFilesExtensionFilter, allFilesExtensionFilter);
@@ -262,7 +265,7 @@ class ProtocolWizard {
 
                 // workaround for bug https://bitbucket.org/controlsfx/controlsfx/issues/539/multiple-dialog-fields-with-validation
                 Platform.runLater(() -> {
-                    validationSupport.registerValidator(protocolTextField, Validator.createEmptyValidator("Protocol file required"));
+//                    validationSupport.registerValidator(protocolTextField, Validator.createEmptyValidator("Protocol file required"));
                     validationSupport.registerValidator(outputFileDir, Validator.createEmptyValidator("Output directory required"));
                     validationSupport.registerValidator(workspaceFileTextField, Validator.createEmptyValidator("Database file required"));
                 });
@@ -288,7 +291,8 @@ class ProtocolWizard {
                 runParameters.setOverwriteFileName(getStringSetting(wizard.getSettings(), "overwriteFile"));
                 runParameters.setOutputDir(getStringSetting(wizard.getSettings(), "outputFileDir"));
                 runParameters.setWorkspaceFileName(getStringSetting(wizard.getSettings(), "workspaceFile"));
-                runParameters.setProtocolFileName(getStringSetting(wizard.getSettings(), "protocolFile"));
+//                runParameters.setProtocolFileName(getStringSetting(wizard.getSettings(), "protocolFile"));
+                SQLiteUtils.setDatabase(runParameters.getWorkspaceFileName());
             }
         };
     }
@@ -299,7 +303,6 @@ class ProtocolWizard {
      */
     private WizardPane createProtocolPage(){
         return new WizardPane(){
-            private ComboBox<String> protocolComboBox = createComboBox("protocolName");
             private ComboBox<String> codebookTypeComboBox = createComboBox("codebookType");
             private CheckBox optionsInSheetsCheckBox = new CheckBox();
             private Label optionsInSheetsLabel = new Label("Create separate sheets for Options found in protocol: ");
@@ -320,15 +323,13 @@ class ProtocolWizard {
             private void createContent(){
                 int row = 0;
                 GridPane gridPane = createGridPane();
-                protocolComboBoxSetup(gridPane, row);
-                codebookTypeComboBoxSetup(gridPane, ++row);
+                codebookTypeComboBoxSetup(gridPane, row);
                 optionsInSheetsCheckBoxSetup(gridPane, ++row);
 
                 this.setContent(gridPane);
 
                 // add validation
                 validationSupport.initInitialDecoration();
-                validationSupport.registerValidator(protocolComboBox, Validator.createEmptyValidator("Protocol required"));
             }
 
             /**
@@ -359,7 +360,6 @@ class ProtocolWizard {
              */
             private void protocolComboBoxSetup(GridPane gridPane, int row){
                 gridPane.add(new Label("Protocol Name: "), 0, row);
-                gridPane.add(protocolComboBox, 1, row);
             }
 
             /**
@@ -384,14 +384,11 @@ class ProtocolWizard {
                 });
             }
 
-            /**
-             * set the procotol combobox content
-             */
-            private void setProtocolList(){
-                // reads the protocolFileName if necessary
-                List<String> protocols = ProtocolFile.getProtocols(runParameters.getProtocolFileName());
-                protocolComboBox.setItems(FXCollections.observableArrayList(protocols));
-                protocolComboBox.getSelectionModel().select(0);
+            private void setProtocolTablePrefix(){
+                SQLiteUtils.openDB();
+                String settings = SQLiteUtils.doTableSettingsQuery();
+                SQLiteUtils.closeDB();
+                runParameters.setProtocolTablePrefix(ParseUtils.getValue(settings, tablePrefixPattern));
             }
 
             /**
@@ -402,8 +399,6 @@ class ProtocolWizard {
             public void onEnteringPage(Wizard wizard) {
                 wizard.invalidProperty().unbind();
                 wizard.invalidProperty().bind(validationSupport.invalidProperty());
-
-                setProtocolList();
             }
 
             /**
@@ -412,9 +407,7 @@ class ProtocolWizard {
              */
             @Override
             public void onExitingPage(Wizard wizard){
-                String selectedProtocol = getStringSetting(wizard.getSettings(), "protocolName");
-                runParameters.setProtocolName(selectedProtocol);
-                runParameters.setProjectName(ProtocolFile.getProject(selectedProtocol));
+                setProtocolTablePrefix();
                 runParameters.setCodebookType(getStringSetting(wizard.getSettings(), "codebookType"));
                 runParameters.setStoreOptionsInSeparateSheets((Boolean) wizard.getSettings().get("optionsInSheetsCheckBox"));
             }
@@ -427,7 +420,6 @@ class ProtocolWizard {
      */
     private WizardPane createNetListPage(){
         return new WizardPane(){
-            private String curProtocol="-1";
             private String curWorkspace="-1";
             private ListSelectionView<String> listSelectionView = new ListSelectionView<>();
             ValidationSupport validationSupport = new ValidationSupport();
@@ -485,8 +477,7 @@ class ProtocolWizard {
                 listSelectionView.getTargetItems().clear();
 
                 // fetch the net names for the protocol
-                SQLiteUtils.setDatabase(runParameters.getWorkspaceFileName());
-                String protocol = runParameters.getProtocolName();
+                String protocol = runParameters.getProtocolTablePrefix();
                 SQLiteUtils.openDB();
                 ObservableList<String> netNames = FXCollections.observableArrayList(SQLiteUtils.getLogicNetNames(protocol));
                 SQLiteUtils.closeDB();
@@ -510,13 +501,11 @@ class ProtocolWizard {
             }
 
             /**
-             * retrieve the current protocolName and database to determine whether we should refresh the netList
+             * check whether the net list has to be refreshed
              */
             private void setNets(){
-                String protocolName = runParameters.getProtocolName();
                 String workspace = runParameters.getWorkspaceFileName();
-                if(!protocolName.equalsIgnoreCase(curProtocol) || !workspace.equalsIgnoreCase(curWorkspace)){
-                    curProtocol = protocolName;
+                if(!workspace.equalsIgnoreCase(curWorkspace)){
                     curWorkspace = workspace;
                     setNetList();
                 }

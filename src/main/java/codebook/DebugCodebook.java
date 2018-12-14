@@ -49,8 +49,7 @@ class DebugCodebook extends DefaultCodebook {
     @Override
     public void writeToExcelSingleSheet(String outputDir){
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelMainHeader(), headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){
@@ -91,8 +90,8 @@ class DebugCodebook extends DefaultCodebook {
         List<String> sheetHeaderList = Arrays.asList("PALGA_VALUE", "PALGA_DESCRIPTION", "CODESYSTEM");
 
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelOptionsMainHeader(), headerStyle);
+//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelOptionsMainHeader(), headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelOptionsMainHeader());
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){

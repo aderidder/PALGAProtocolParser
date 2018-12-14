@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -64,10 +66,15 @@ public class CodebookItem {
         this.validationRules = validationRules;
     }
 
+    // Sqa$(temp.genesetnummer)RedenAanvraag -->
+    //  1: Sqa$(
+    //  2: )RedenAanvraag
+    // This we can then turn into e.g. Sqa$(Var)RedenAanvraag
     private static String cleanPath(String path){
-        int dollarIndex = path.indexOf("$");
-        if(dollarIndex>0) {
-            return path.substring(0, dollarIndex);
+        Pattern pattern = Pattern.compile("(.*\\$\\().*(\\).*)");
+        Matcher matcher = pattern.matcher(path);
+        if(matcher.matches()){
+            return matcher.group(1)+"Var"+matcher.group(2);
         }
         return path.trim();
     }
@@ -266,7 +273,7 @@ public class CodebookItem {
      * @return the path or a substring with a maximum of 32 characters
      */
     public String getPathAsRef(){
-        if(path.length()>32){
+        if(path.length()>31){
             return path.substring(0,31);
         }
         return path;

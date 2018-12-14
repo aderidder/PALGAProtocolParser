@@ -20,7 +20,6 @@
 package codebook;
 
 import data.Protocol;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import utils.ExcelUtils;
@@ -38,7 +37,8 @@ import java.util.List;
  */
 class NKICodebook  extends DefaultCodebook {
     private static boolean skipPath(String path){
-        return path.startsWith("temp.") || path.equalsIgnoreCase("temp");
+//        return path.startsWith("temp.") || path.equalsIgnoreCase("temp");
+        return false;
     }
 
     /**
@@ -59,8 +59,7 @@ class NKICodebook  extends DefaultCodebook {
         List<String> mainHeaderNames = Arrays.asList("path","caption","input_type","data_type", "options");
 
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, mainHeaderNames);
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){
@@ -86,15 +85,14 @@ class NKICodebook  extends DefaultCodebook {
     public void writeToExcelOptionsInSheets(String outputDir){
 //        List<String> mainHeaderNames = Arrays.asList("path","caption","code", "code_description", "codesystem", "input_type","data_type", "codelist_ref");
         List<String> mainHeaderNames = Arrays.asList("id", "description_nl", "description_en", "codesystem","code", "description_code", "codelist_ref","data_type", "input_type", "properties");
-
         List<String> sheetHeaderList = Arrays.asList("value_nl", "description_nl", "value_en", "description_en", "codesystem", "code", "description_code");
 
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
         Sheet infosheet = ExcelUtils.createSheetWithoutHeader(workbook, "INFO");
         addInfoSheetData(infosheet);
 
-        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
+//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
+        Sheet mainsheet = addMainWorksheet(workbook, mainHeaderNames);
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
             for(CodebookItem codebookItem:codebookItems){

@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import utils.ExcelUtils;
+import utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,6 +139,7 @@ abstract class DefaultCodebook implements Codebook{
      * @param optionsList    the values that need to be added
      */
     void addOptionsWorksheet(Workbook workbook, String sheetName, List<String> headerList, List<String> optionsList){
+        sheetName = StringUtils.cleanString(sheetName);
         Sheet sheet = workbook.getSheet(sheetName);
         if(sheet==null){
             CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
@@ -146,6 +148,12 @@ abstract class DefaultCodebook implements Codebook{
                 ExcelUtils.writeValues(sheet, anOption, anOption);
             }
         }
+    }
+
+    Sheet addMainWorksheet(Workbook workbook, List<String> mainHeaderNames){
+        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
+        String sheetName = "CODEBOOK";
+        return ExcelUtils.createSheetWithHeader(workbook, sheetName, mainHeaderNames, headerStyle);
     }
 
     /**

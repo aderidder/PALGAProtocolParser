@@ -79,7 +79,7 @@ public class ExcelUtils {
      * @return the newly created sheet
      */
     public static Sheet createSheetWithHeader(Workbook workbook, String sheetName, List <String> headerNames, CellStyle headerStyle){
-        Sheet sheet = workbook.createSheet(StringUtils.cleanString(sheetName));
+        Sheet sheet  = workbook.createSheet(sheetName);
         Row row = sheet.createRow(0);
 
         for(int i=0; i<headerNames.size(); i++){
