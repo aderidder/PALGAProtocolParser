@@ -43,6 +43,9 @@ public class CodebookFactory {
         else if(codebookType.equalsIgnoreCase("PALGA")){
             codebookList.add(new PalgaCodebook(protocol, captionOverwriter, storeInSeparateSheets));
         }
+        else if(codebookType.equalsIgnoreCase("PALGAWEB")){
+            codebookList.add(new PalgaCodebookWeb(protocol, captionOverwriter, storeInSeparateSheets));
+        }
         else if(codebookType.equalsIgnoreCase("DEBUG")){
             codebookList.add(new DebugCodebook(protocol, captionOverwriter, storeInSeparateSheets));
         }
@@ -50,9 +53,11 @@ public class CodebookFactory {
             codebookList.add(new NKICodebook(protocol, captionOverwriter, true));
             codebookList.add(new PalgaCodebook(protocol, captionOverwriter, false));
             codebookList.add(new PalgaCodebook(protocol, captionOverwriter, true));
+            codebookList.add(new PalgaCodebookWeb(protocol, captionOverwriter, false));
+            codebookList.add(new PalgaCodebookWeb(protocol, captionOverwriter, true));
         }
         else{
-            throw new RuntimeException("Unknown codebooktype: "+codebookType+". Valid options: {PALGA, NKI, DEBUG, PALGA & NKI}");
+            throw new RuntimeException("Unknown codebooktype: "+codebookType+". Valid options: {PALGA, PALGAWEB, NKI, DEBUG, PALGA & NKI}");
         }
         return codebookList;
     }

@@ -35,6 +35,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
@@ -64,7 +65,7 @@ public class MainWindow {
      * @param primaryStage the primary stage
      */
     public void createMainWindow(Stage primaryStage) {
-        primaryStage.setTitle("Codebook Generator");
+        primaryStage.setTitle("Codebook Generator - "+MainWindow.class.getPackage().getImplementationVersion());
 
         // create the components
         Node topPane = setupTopPane();
@@ -82,7 +83,7 @@ public class MainWindow {
         primaryStage.setScene(scene);
 
         // create an icon
-        primaryStage.getIcons().add(resourceManager.getResourceImage("antonie_icon.png"));
+        primaryStage.getIcons().add(resourceManager.getResourceImage("icon.png"));
         // add the stylesheet
         scene.getStylesheets().add(resourceManager.getResourceStyleSheet("style.css"));
         primaryStage.setResizable(false);
@@ -95,34 +96,37 @@ public class MainWindow {
      * @return the Node which will be added to the borderpane
      */
     private Node setupTopPane(){
+        GridPane grid = new GridPane();
+        grid.setHgap(55);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20,10,20,10));
+
+//        grid.setGridLinesVisible(true);
+
         // create first image for the left side
-        ImageView antonieImv = new ImageView();
-        antonieImv.setFitHeight(110);
-        antonieImv.setFitWidth(110);
-        antonieImv.setImage(resourceManager.getResourceImage("antonie.png"));
+        ImageView healthriImv = new ImageView();
+        healthriImv.setFitHeight(80);
+        healthriImv.setFitWidth(170);
+        healthriImv.setImage(resourceManager.getResourceImage("healthri_transp.png"));
+        grid.add(healthriImv,0,1,1,1);
 
         // create the title
         Label sceneTitle = new Label("Codebook Generator");
         sceneTitle.setId("title");
-        sceneTitle.setPadding(new Insets(30,0,0,0));
+        grid.add(sceneTitle,1,1,1,1);
 
         // create second image for the right side
         ImageView palgaImv = new ImageView();
         palgaImv.setFitHeight(100);
         palgaImv.setFitWidth(140);
-        palgaImv.setImage(resourceManager.getResourceImage("palga.png"));
+        palgaImv.setImage(resourceManager.getResourceImage("palga_transp.png"));
+        grid.add(palgaImv,2,1,1,1);
 
-        // add all three to an hbox
-        HBox hb = new HBox();
-        hb.setPadding(new Insets(25,15,25,15));
-        hb.setSpacing(75);
-        hb.getChildren().addAll(antonieImv, sceneTitle, palgaImv);
+        // give the grid an id and add styleclass
+        grid.setId("topPane");
+        grid.getStyleClass().add("fillBackground");
 
-        // give the hbox an id and add styleclass
-        hb.setId("topPane");
-        hb.getStyleClass().add("fillBackground");
-
-        return hb;
+        return grid;
     }
 
     /**
@@ -186,7 +190,7 @@ public class MainWindow {
 
         Hyperlink aboutHyperlink = new Hyperlink("About");
         aboutHyperlink.getStyleClass().add("hyperlink");
-        aboutHyperlink.setOnAction(event -> logArea.setText(getAboutText()));
+        aboutHyperlink.setOnAction(event -> AboutWindow.showAbout());
 
         Hyperlink helpHyperlink = new Hyperlink("Help");
         helpHyperlink.getStyleClass().add("hyperlink");
@@ -200,27 +204,6 @@ public class MainWindow {
         HBox.setMargin(buttonExit, new Insets(0,150,0,0));
 
         return hBox;
-    }
-
-    private String getAboutText(){
-        return "This program was created by Sander de Ridder at the NKI in a collaboration between\n" +
-               "NKI / AvL and PALGA.\n" +
-               "Testers: Sander de Ridder (NKI), Rinus Voorham (PALGA) and Rick Spaan (PALGA)\n" +
-               "-------------------------------------------------------------------------------------------------------------------\n\n"+
-               "Copyright 2017 NKI / AvL\n" +
-               "\n" +
-               "PALGAProtocolParser is free software: you can redistribute it and/or modify\n" +
-               "it under the terms of the GNU General Public License as published by\n" +
-               "the Free Software Foundation, either version 3 of the License, or\n" +
-               "(at your option) any later version.\n" +
-               "\n" +
-               "PALGAProtocolParser is distributed in the hope that it will be useful,\n" +
-               "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-               "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-               "GNU General Public License for more details.\n" +
-               "\n" +
-               "You should have received a copy of the GNU General Public License\n" +
-               "along with PALGAProtocolParser. If not, see <http://www.gnu.org/licenses/>\n";
     }
 
     /**
@@ -272,7 +255,7 @@ public class MainWindow {
 
                 logger.log(Level.INFO, "Reading the protocol data from the database...");
                 Protocol protocol = runParameters.getProtocol();
-                protocol.generateCodebookItems();
+//                protocol.generateCodebookItems();
 
 
                 logger.log(Level.INFO, "Setting up the codebooks...");

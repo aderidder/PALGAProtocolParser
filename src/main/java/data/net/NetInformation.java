@@ -48,6 +48,12 @@ class NetInformation {
      * @param data    NET data which contains the information we need
      */
     private void addNodeData(String data) {
+        // Apparently this part can also contain a datamodel element, which also has a name and a version
+        // Remove it from the String if it's there.
+        String datamodel = ParseUtils.getElementData(data, "datamodel");
+        if(!datamodel.equalsIgnoreCase("")) {
+            data = data.replace(datamodel, "datamodel=\n");
+        }
         name = ParseUtils.getValue(data, namePattern);
         version = ParseUtils.getValue(data, versionPattern);
         stamp = ParseUtils.getValue(data, stampPattern);

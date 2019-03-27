@@ -73,7 +73,7 @@ public class Net {
                 nodeMap.put(key, node);
             }
             else{
-                logger.log(Level.INFO, "double id found: "+key);
+                logger.log(Level.INFO, "Net: "+netInformation.getName()+"\tdouble id found: "+key);
             }
         }
         // connect the nodes, which we need to be able to generate rules

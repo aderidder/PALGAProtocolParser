@@ -41,6 +41,8 @@ public class Protocol {
     private String protocolName;
 //    private String projectName;
 
+    private Map<String, List<CodebookItem>> codebookItemMap = new TreeMap<>();
+
     private ProtocolInfo protocolInfo;
 
     public Protocol(){
@@ -99,19 +101,22 @@ public class Protocol {
         this.selectedNets = selectedNets;
     }
 
+
+    public Map<String, List<CodebookItem>> getCodebookItems(){
+        if (codebookItemMap.size()==0) generateCodebookItems();
+        return codebookItemMap;
+    }
+
     /**
      * returns a map with paths (variable name) mapped to their codebookItems
      * @return a map with paths (variable name) mapped to their codebookItems
      */
-    public Map<String, List<CodebookItem>> generateCodebookItems(){
-        Map<String, List<CodebookItem>> codebookItemMap = new TreeMap<>();
+    private void generateCodebookItems(){
         List<Net> netList = createNetList();
         // for each net add its items to the codebookItem Map
         for(Net net:netList){
             net.addCodebookItems(codebookItemMap);
         }
-
-        return codebookItemMap;
     }
 
     /**

@@ -368,10 +368,10 @@ class ProtocolWizard {
              * @param row         row number
              */
             private void codebookTypeComboBoxSetup(GridPane gridPane, int row){
-                codebookTypeComboBox.setItems(FXCollections.observableArrayList("PALGA", "NKI", "DEBUG", "PALGA & NKI"));
+                codebookTypeComboBox.setItems(FXCollections.observableArrayList("PALGAWEB", "PALGA", "NKI", "DEBUG", "PALGA & NKI"));
                 gridPane.add(new Label("Codebook Type: "), 0, row);
                 gridPane.add(codebookTypeComboBox, 1, row);
-                codebookTypeComboBox.getSelectionModel().select(3);
+                codebookTypeComboBox.getSelectionModel().select(4);
 
                 // hide the "options in sheets" stuff when PALGA & NKI is selected
                 codebookTypeComboBox.setOnAction((event) -> {

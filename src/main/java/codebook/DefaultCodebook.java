@@ -66,7 +66,7 @@ abstract class DefaultCodebook implements Codebook{
      * @param captionOverwriter    holds caption overwrites and tricks conflicting captions
      */
     private void addData(CaptionOverwriter captionOverwriter){
-        codebookItemMap = protocol.generateCodebookItems();
+        codebookItemMap = protocol.getCodebookItems();
         for(List<CodebookItem> codebookItems:codebookItemMap.values()) {
             overwriteCaption(codebookItems, captionOverwriter);
             tryMerge(codebookItems, captionOverwriter);
@@ -128,7 +128,7 @@ abstract class DefaultCodebook implements Codebook{
      */
     String getCodebookOutputName(String outputDir){
         String inSeparateSheets = writeInSeparateSheets==true?"_sep":"";
-        return outputDir+protocol.getProtocolName()+"_codebook_"+protocol.getVersion()+"_"+codebookType+inSeparateSheets+".xlsx";
+        return outputDir+protocol.getProtocolName()+"_codebook_"+protocol.getSmallVersion()+"_"+codebookType+inSeparateSheets+".xlsx";
     }
 
     /**
