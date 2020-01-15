@@ -53,7 +53,6 @@ import java.util.stream.Collectors;
  */
 class ProtocolWizard {
     private static final Logger logger = LogManager.getLogger(ProtocolWizard.class.getName());
-//    private static final Pattern tablePrefixPattern = ParseUtils.getStringPattern("parameter_tabel_prefix");
     private static final Pattern tablePrefixPattern = ParseUtils.getStringPattern("conclusion_net");
 
 
@@ -68,7 +67,7 @@ class ProtocolWizard {
      * @param oldParameters    the parameters used in the previous run
      * @return true/false, whether the wizard was successfully completed
      */
-    public boolean startWizard(RunParameters oldParameters) {
+    boolean startWizard(RunParameters oldParameters) {
 
         canRun = false;
         // create the pages
@@ -253,7 +252,6 @@ class ProtocolWizard {
                 int row = 0;
                 GridPane gridPane = createGridPane();
 
-//                TextField protocolTextField = createBrowseFileRow(gridPane, "protocolFile", "Protocol file:", oldParameters.getProtocolFileName(), row++, txtFilesExtensionFilter, allFilesExtensionFilter);
                 TextField workspaceFileTextField = createBrowseFileRow(gridPane, "workspaceFile", "Workspace file:", oldParameters.getWorkspaceFileName(), row++, dbFilesExtensionFilter, allFilesExtensionFilter);
                 TextField outputFileDir = createBrowseDirRow(gridPane, "outputFileDir", "Output directory:", oldParameters.getOutputDir(), row++);
                 createBrowseFileRow(gridPane, "overwriteFile", "Name overwrite file:", oldParameters.getOverwriteFileName(), row++, txtFilesExtensionFilter, allFilesExtensionFilter);
@@ -265,7 +263,6 @@ class ProtocolWizard {
 
                 // workaround for bug https://bitbucket.org/controlsfx/controlsfx/issues/539/multiple-dialog-fields-with-validation
                 Platform.runLater(() -> {
-//                    validationSupport.registerValidator(protocolTextField, Validator.createEmptyValidator("Protocol file required"));
                     validationSupport.registerValidator(outputFileDir, Validator.createEmptyValidator("Output directory required"));
                     validationSupport.registerValidator(workspaceFileTextField, Validator.createEmptyValidator("Database file required"));
                 });
@@ -291,7 +288,6 @@ class ProtocolWizard {
                 runParameters.setOverwriteFileName(getStringSetting(wizard.getSettings(), "overwriteFile"));
                 runParameters.setOutputDir(getStringSetting(wizard.getSettings(), "outputFileDir"));
                 runParameters.setWorkspaceFileName(getStringSetting(wizard.getSettings(), "workspaceFile"));
-//                runParameters.setProtocolFileName(getStringSetting(wizard.getSettings(), "protocolFile"));
                 SQLiteUtils.setDatabase(runParameters.getWorkspaceFileName());
             }
         };
@@ -613,5 +609,3 @@ class ProtocolWizard {
     }
 
 }
-
-

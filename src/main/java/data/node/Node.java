@@ -53,7 +53,6 @@ public interface Node {
      * returns a list of the output values which determines the targets of the current node
      * @return a list of output values
      */
-//    List<OutputValues> getOutputTargets();
     List<String> getOutputTargets();
 
     /**

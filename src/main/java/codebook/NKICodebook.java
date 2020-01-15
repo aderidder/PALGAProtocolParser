@@ -36,6 +36,13 @@ import java.util.List;
  * into art-decor
  */
 class NKICodebook  extends DefaultCodebook {
+    /**
+     * returns whether certain paths should actually be in the output file
+     * we used this to prevent "temp" variables from being added. However, it caused
+     * some issues, so for now, just add everyting
+     * @param path path to check
+     * @return always false at the moment
+     */
     private static boolean skipPath(String path){
 //        return path.startsWith("temp.") || path.equalsIgnoreCase("temp");
         return false;
@@ -83,7 +90,6 @@ class NKICodebook  extends DefaultCodebook {
      */
     @Override
     public void writeToExcelOptionsInSheets(String outputDir){
-//        List<String> mainHeaderNames = Arrays.asList("path","caption","code", "code_description", "codesystem", "input_type","data_type", "codelist_ref");
         List<String> mainHeaderNames = Arrays.asList("id", "description_nl", "description_en", "codesystem","code", "description_code", "codelist_ref","data_type", "input_type", "properties");
         List<String> sheetHeaderList = Arrays.asList("value_nl", "description_nl", "value_en", "description_en", "codesystem", "code", "description_code");
 
@@ -91,7 +97,6 @@ class NKICodebook  extends DefaultCodebook {
         Sheet infosheet = ExcelUtils.createSheetWithoutHeader(workbook, "INFO");
         addInfoSheetData(infosheet);
 
-//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
         Sheet mainsheet = addMainWorksheet(workbook, mainHeaderNames);
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){
@@ -112,6 +117,10 @@ class NKICodebook  extends DefaultCodebook {
         ExcelUtils.writeXLSXWorkBook(workbook, getCodebookOutputName(outputDir));
     }
 
+    /**
+     * add sheet with metadata
+     * @param sheet the sheet to which to add the metadata
+     */
     private void addInfoSheetData(Sheet sheet){
         String version = protocol.getSmallVersion();
         String protocolName = protocol.getProtocolName();
@@ -126,6 +135,11 @@ class NKICodebook  extends DefaultCodebook {
 
     }
 
+    /**
+     * attempts to fix some issues which may prevent items from being merged
+     * @param codebookItem1 first codebook item
+     * @param codebookItem2 second codebook item
+     */
     private void solveConflicts(CodebookItem codebookItem1, CodebookItem codebookItem2){
         fixNumber(codebookItem1);
         fixNumber(codebookItem2);

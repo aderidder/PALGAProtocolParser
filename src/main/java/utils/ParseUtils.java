@@ -79,20 +79,32 @@ public class ParseUtils {
     }
 
     /**
-     * the "parts" entry of the data can consist of multiple entries. we need all of them.
-     * this function takes the data and returns all the entries as separate list entries
+     * the "parts" entry of the data can consist of multiple entries. e.g. something like
+     * 	parts = {
+     *                {
+     * 			_name = "set_values",
+     * 			data_type = "text",
+     * 		    some_type = "text"
+     *        },
+     *        {
+     * 			_name = "insert_data_item",
+     * 			dta_location = "temp",
+     * 		    some_type = "text"
+     *        };
+     * 		},
+     * will give a List with two list entries.
      * @param data    the data
      * @return list with the parts entries
      */
     public static List<String> partsSplitter(String data){
 
-        // keep track of the level and decides whether we may add the line or whether
+        // keeps track of the level and decides whether we may add the line or whether
         // the line is a new element
         class LevelSplit{
             private int level;
             private int curLevel=0;
 
-            LevelSplit(int level){
+            private LevelSplit(int level){
                 this.level = level;
             }
 
@@ -100,7 +112,7 @@ public class ParseUtils {
              * if line contains a {, level up
              * @param line    the line to check
              */
-            void checkLevelUp(String line){
+            private void checkLevelUp(String line){
                 if(line.contains("{")){
                     curLevel++;
                 }
@@ -110,7 +122,7 @@ public class ParseUtils {
              * if line contains a }, level down
              * @param line    the line to check
              */
-            void checkLevelDown(String line){
+            private void checkLevelDown(String line){
                 if(line.contains("}")){
                     curLevel--;
                 }
@@ -121,7 +133,7 @@ public class ParseUtils {
              * @param line    the line to check
              * @return true/false
              */
-            boolean newElement(String line){
+            private boolean newElement(String line){
                 return curLevel == level && line.contains("}");
             }
 
@@ -129,7 +141,7 @@ public class ParseUtils {
              * checks whether the line may be added to the current element
              * @return true/false
              */
-            boolean mayAddLine(){
+            private boolean mayAddLine(){
                 return curLevel >= level;
             }
         }

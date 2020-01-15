@@ -39,7 +39,6 @@ public class Protocol {
     private List<String> selectedNets = new ArrayList<>();
     private String protocolTablePrefix;
     private String protocolName;
-//    private String projectName;
 
     private Map<String, List<CodebookItem>> codebookItemMap = new TreeMap<>();
 
@@ -108,8 +107,7 @@ public class Protocol {
     }
 
     /**
-     * returns a map with paths (variable name) mapped to their codebookItems
-     * @return a map with paths (variable name) mapped to their codebookItems
+     * for each net, adds codebookItems to the codebookItemMap
      */
     private void generateCodebookItems(){
         List<Net> netList = createNetList();
@@ -188,7 +186,7 @@ public class Protocol {
             return version;
         }
 
-        public String getSmallVersion(){
+        String getSmallVersion(){
             return smallVersion;
         }
     }

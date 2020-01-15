@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by admin on 3/21/2019.
+ * Default things for palga codebooks
  */
 abstract class DefaultPalgaCodebook extends DefaultCodebook {
     /**
@@ -27,11 +27,7 @@ abstract class DefaultPalgaCodebook extends DefaultCodebook {
      */
     @Override
     public void writeToExcelSingleSheet(String outputDir){
-//        List<String> mainHeaderNames = getWriteToExcelMainHeader();
-
         Workbook workbook = ExcelUtils.createXLSXWorkbook();
-//        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-//        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
         Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
 
         for(List<CodebookItem> codebookItems:codebookItemMap.values()){

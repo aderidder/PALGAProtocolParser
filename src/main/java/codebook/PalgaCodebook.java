@@ -43,27 +43,6 @@ class PalgaCodebook extends DefaultPalgaCodebook {
     }
 
     /**
-     * write codebook to Excel, everything in a single worksheet
-     * @param outputDir    where the file should be written
-     */
-//    @Override
-//    public void writeToExcelSingleSheet(String outputDir){
-////        List<String> mainHeaderNames = getWriteToExcelMainHeader();
-//
-//        Workbook workbook = ExcelUtils.createXLSXWorkbook();
-////        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-////        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", mainHeaderNames, headerStyle);
-//        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
-//
-//        for(List<CodebookItem> codebookItems:codebookItemMap.values()){
-//            for(CodebookItem codebookItem:codebookItems){
-//                ExcelUtils.writeValues(mainsheet, getWriteToExcelValuesSingleSheet(codebookItem));
-//            }
-//        }
-//        ExcelUtils.writeXLSXWorkBook(workbook, getCodebookOutputName(outputDir));
-//    }
-
-    /**
      * get a list with the headernames for the main sheet
      * @return list with the headernames for the main sheet
      */
@@ -83,89 +62,26 @@ class PalgaCodebook extends DefaultPalgaCodebook {
         argumentsList.addAll(codebookItem.getPartialRules());
         return argumentsList;
     }
-//
-//    /**
-//     * write codebook to Excel, options for concepts in separate sheets
-//     * @param outputDir    where the file should be written
-//     */
-//    @Override
-//    public void writeToExcelOptionsInSheets(String outputDir){
-//        List<String> sheetHeaderList = Arrays.asList("PALGA_VALUE", "PALGA_DESCRIPTION", "CODESYSTEM");
-//
-//        Workbook workbook = ExcelUtils.createXLSXWorkbook();
-////        CellStyle headerStyle = ExcelUtils.createHeaderStyle(workbook);
-////        Sheet mainsheet = ExcelUtils.createSheetWithHeader(workbook, "CODEBOOK", getWriteToExcelOptionsMainHeader(), headerStyle);
-//        Sheet mainsheet = addMainWorksheet(workbook, getWriteToExcelMainHeader());
-//
-//        for(List<CodebookItem> codebookItems:codebookItemMap.values()){
-//            for(CodebookItem codebookItem:codebookItems){
-//                if(codebookItem.hasOptions()) {
-//                    ExcelUtils.writeValues(mainsheet, getWriteToExcelOptionsValuesOptionsRef(codebookItem));
-//                    addOptionsWorksheet(workbook, codebookItem.getPathAsRef(), sheetHeaderList, codebookItem.getOptions());
-//                }
-//                else {
-//                    ExcelUtils.writeValues(mainsheet, getWriteToExcelOptionsValuesNoOptionsRef(codebookItem));
-//                }
-//            }
-//        }
-//        ExcelUtils.writeXLSXWorkBook(workbook, getCodebookOutputName(outputDir));
-//    }
-//
-//    /**
-//     * get a list with the headernames for the main sheet
-//     * @return list with the headernames for the main sheet
-//     */
-//    private List<String> getWriteToExcelOptionsMainHeader(){
-//        List<String> mainHeaderNames = new ArrayList<>(Arrays.asList("path","caption","input_type","data_type", "codelist_ref","field_validation"));
-//        mainHeaderNames.addAll(getFieldEnteredWhenHeader());
-//        return mainHeaderNames;
-//    }
-//
-//    /**
-//     * get a list with the values to be written when the codebook item has no options
-//     * @param codebookItem    the codebook item which has the values that are to be written
-//     * @return list with values
-//     */
+
+    /**
+     * get a list with the values to be written when the codebook item does not have options
+     * @param codebookItem    the codebook item which has the values that are to be written
+     * @return list with values
+     */
     List<String> getWriteToExcelOptionsValuesNoOptionsRef(CodebookItem codebookItem){
         List<String> argumentsList = new ArrayList<>(Arrays.asList(codebookItem.getPath(), codebookItem.getCaption(), codebookItem.get_name(), codebookItem.getData_type(), "", codebookItem.getValidationRule()));
         argumentsList.addAll(codebookItem.getPartialRules());
         return argumentsList;
     }
-//
-//    /**
-//     * get a list with the values to be written when the codebook item does have options
-//     * @param codebookItem    the codebook item which has the values that are to be written
-//     * @return list with values
-//     */
+
+    /**
+     * get a list with the values to be written when the codebook item does have options
+     * @param codebookItem    the codebook item which has the values that are to be written
+     * @return list with values
+     */
     List<String> getWriteToExcelOptionsValuesOptionsRef(CodebookItem codebookItem){
         List<String> argumentsList = new ArrayList<>(Arrays.asList(codebookItem.getPath(), codebookItem.getCaption(), codebookItem.get_name(), codebookItem.getData_type(), codebookItem.getPathAsRef(), codebookItem.getValidationRule()));
         argumentsList.addAll(codebookItem.getPartialRules());
         return argumentsList;
     }
-//
-//
-//    /**
-//     * checks whether two codebookitems can be merged into a single codebookitem
-//     * @param codebookItem1        first codebook item
-//     * @param codebookItem2        second codebook item
-//     * @param captionOverwriter    caption overwriting and tracking of conflicting captions
-//     * @return true/false
-//     */
-//    @Override
-//    boolean mayMergeForCodebook(CodebookItem codebookItem1, CodebookItem codebookItem2, CaptionOverwriter captionOverwriter) {
-//        boolean canMerge=true;
-//
-//        if(!codebookItem1.getData_type().equalsIgnoreCase(codebookItem2.getData_type())){
-//            canMerge = false;
-//        }
-//        else if(!codebookItem1.getValidationRule().equalsIgnoreCase(codebookItem2.getValidationRule())){
-//            canMerge = false;
-//        }
-//        else if(!codebookItem1.getPartialRulesString().equalsIgnoreCase(codebookItem2.getPartialRulesString())){
-//            canMerge = false;
-//        }
-//
-//        return canMerge;
-//    }
-
 }

@@ -33,7 +33,6 @@ class RunParameters {
     private String outputDir = "";
     private String workspaceFileName = "";
     private String overwriteFileName = "";
-    private String protocolFileName = "";
 
     private boolean storeOptionsInSeparateSheets = false;
 
@@ -64,14 +63,6 @@ class RunParameters {
         protocolTablePrefix = protocolTablePrefix.substring(0, protocolTablePrefix.lastIndexOf("_")+1);
         protocol.setProtocolTablePrefix(protocolTablePrefix);
     }
-
-    /**
-     * sets the project name
-     * @param projectName    the name of the project
-     */
-//    void setProjectName(String projectName){
-//        protocol.setProjectName(projectName);
-//    }
 
     /**
      * get the nets that have been selected in the wizard
@@ -155,22 +146,6 @@ class RunParameters {
     void setCodebookType(String codebookType) {
         this.codebookType = codebookType;
     }
-
-    /**
-     * get the full name of the protocol file, which contains a protocolName and projectName on every line
-     * @return the full name of the protocol file
-     */
-//    String getProtocolFileName() {
-//        return protocolFileName;
-//    }
-
-    /**
-     * set the protocol filename, which was selected in the wizard
-     * @param protocolFileName    the name of the protocolfile
-     */
-//    void setProtocolFileName(String protocolFileName) {
-//        this.protocolFileName = protocolFileName;
-//    }
 
     /**
      * loads extra information about the protocol, such as the version

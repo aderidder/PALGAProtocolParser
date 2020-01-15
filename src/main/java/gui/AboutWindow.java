@@ -14,12 +14,15 @@ import javafx.stage.StageStyle;
 /**
  * Created by admin on 12/19/2018.
  */
-public class AboutWindow {
+class AboutWindow {
     private static ResourceManager resourceManager = new ResourceManager();
     private static Dialog dialog;
     private static final double prefWidth = 675;
     private static final double prefHeigth = 400;
 
+    /**
+     * show the dialog
+     */
     static void showAbout(){
         if (dialog==null) {
             createDialog();
@@ -27,6 +30,9 @@ public class AboutWindow {
         dialog.showAndWait();
     }
 
+    /**
+     * creates the dialog
+     */
     private static void createDialog(){
         dialog = new Dialog();
         dialog.getDialogPane().setPrefSize(prefWidth, prefHeigth);
@@ -54,6 +60,10 @@ public class AboutWindow {
         dialog.getDialogPane().setContent(borderPane);
     }
 
+    /**
+     * creates the top pane
+     * @return the node that was created
+     */
     private static Node setupTopPane(){
         Label sceneTitle = new Label("About the Protocol Parser");
         sceneTitle.setId("title2");
@@ -61,6 +71,10 @@ public class AboutWindow {
         return sceneTitle;
     }
 
+    /**
+     * creates the center pane
+     * @return the node that was created
+     */
     private static Node setupCenterPane(){
         TextArea textArea = new TextArea(getAboutText());
         textArea.setEditable(false);
@@ -74,6 +88,10 @@ public class AboutWindow {
         return hBox;
     }
 
+    /**
+     * returns the about text
+     * @return the about text
+     */
     private static String getAboutText(){
         return "PALGA Protocol Parser is a collaboration between NKI / AvL, VUmc and PALGA.\n" +
                 "The program was designed and created by:" +
@@ -100,6 +118,10 @@ public class AboutWindow {
                 "along with PALGAProtocolParser. If not, see <http://www.gnu.org/licenses/>\n";
     }
 
+    /**
+     * creates the bottom pane
+     * @return the node that was created
+     */
     private static Node setupBottomPane(){
         double f=0.70;
         int height=(int) Math.floor(60*f);
@@ -152,6 +174,13 @@ public class AboutWindow {
         return grid;
     }
 
+    /**
+     * help function to create an image view
+     * @param height fit height
+     * @param width  fit width
+     * @param image  image name
+     * @return image view
+     */
     private static ImageView getImageView(int height, int width, String image){
         ImageView imageView = new ImageView();
         imageView.setFitHeight(height);
